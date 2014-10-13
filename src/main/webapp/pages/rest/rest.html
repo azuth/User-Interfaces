@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<script type="text/javascript" src="/PictureCommunity/faces/resources/js/jquery-2.0.1.js"></script> 
+		<!-- <script src="http://code.jquery.com/jquery-2.0.1.min.js"></script> -->
+		<!-- <script src="jquery.ajaxfileupload.js"></script>  -->
+		<script type="text/javascript" src="/PictureCommunity/faces/resources/js/vendor/jquery.ui.widget.js"></script>
+		<script type="text/javascript" src="/PictureCommunity/faces/resources/js/jquery.iframe-transport.js"></script>
+		<script type="text/javascript" src="/PictureCommunity/faces/resources/js/jquery.fileupload.js"></script>
+		<script type="text/javascript">
+			$.ajaxSetup({ cache: false });
+			
+			$(document).ajaxError(function(){
+				  alert("An error occurred!");
+				}); 
+			
+			function dumpData(data) {
+				 $.each(data, function(key, val) {
+					 $("#dump").append("id = " + key + ", value = " + val + "<br/>\n");
+				 });
+				 $("#dump").append("----<br/>\n");
+			}
+
+			<!-- Setzt den Header fuer die Basic-Athentifizierung. -->
+			function login(name, password) {
+				$.ajaxSetup({
+					  headers: {
+					    'Authorization': "Basic " + btoa(name + ":" + password)
+					  }
+					});
+			}
+
+			<!-- Setzt den Header fuer die Basic-Athentifizierung auf einen ungueltigen Wert. -->
+			function logout() {
+				$.ajaxSetup({
+					  headers: {
+					    'Authorization': "Basic " + btoa('' + ":" + '')
+					  }
+					});
+			}
+
+			<!-- Einen neuen Anwender anmelden -->
+			function register(name, password, mail) {
+				var senddata={ username : name, password : password, mailaddress: mail };
+				$.post('/PictureCommunity/REST/register', senddata, function(data) {
+					dumpData(data);
+				});
+			}
+
+			<!-- Sucht den Anwender, dessen Anmeldenamen die Zeichenkette name enthaelt. -->
+			function findUsers(name) {
+				$.getJSON('/PictureCommunity/REST/user/name/' + name, {}, function(data) {
+					$.each(data, function(key, val) {
+						dumpData(val);
+					});
+				});
+			}
+	
+			<!-- Sucht den Anwender mit der uebergebenen Mailadresse. -->
+			function findUser(mailAddress) {
+				$.getJSON('/PictureCommunity/REST/user/mailaddress/' + mailAddress, {}, function(data) {
+					dumpData(data);
+				});
+			}
+
+			<!-- Ermittelt alle Freunde des Anwenders mit dem uebergebenen vollstaendigen Anmeldenamen. -->
+			function friendsOf(name) {
+				$.getJSON('/PictureCommunity/REST/user/friends/' + name, {}, function(data) {
+					$.each(data, function(key, val) {
+						dumpData(val);
+					});
+				});
+			}
+
+			<!-- Ermittelt die Informationen zu allen Bildern, die fuer den aktuellen Anwender sichtbar sind. -->
+			function getPictureInfos(name) {
+				$.getJSON('/PictureCommunity/REST/pictures/' + name, {})
+					.fail(function(jqxhr, textStatus, error) {
+						$("#dump").append(error + "<br/>\n");
+					})
+					.done(function(data) {
+						$.each(data, function(key, val) {
+							dumpData(val);
+						});
+					});
+			}
+			
+			<!-- Laedt ein Bild mit der uebergebenen ID und traegt es in das div-Tag mit der ID iamges ein. -->
+			<!-- Durch die Angabe eines gueltigen Breite wird das Bild auf diese Groesse gestreckt oder gestaucht. -->
+			<!-- Hat der Benutzer nicht vorher den Header fuer die Basic-Athentifizierung gesetzt, dann werden nur die oeffentlichen Bilder -->
+			<!-- beruecksichtigt. -->
+			function loadPicture(id, width) {
+				var img = document.createElement('img');
+				img.onload = function() {
+					$("#images").empty();
+					$("#images").append(img);
+				}
+				if (width >= 1 && width < 10000) {
+					img.src = '/PictureCommunity/REST/picture/' + id + '?width=' + width + '&_timestamp=' + Math.random();
+				}
+				else {
+					img.src = '/PictureCommunity/REST/picture/' + id + '?_timestamp=' + Math.random();
+				}
+			}
+
+			$(function () {
+			    $('#fileupload').fileupload({url: '/PictureCommunity/REST/newpicture', formData: function(form) {
+					return [{ name: 'description', value: 'Ein perfektes Bild eines Meisters'}, { name: 'public', value: true }]; 
+				}});
+			});
+		</script>
+	</head>
+	
+	<body>
+		<div id="images"></div>
+		<p/>
+		<form id="value_form" >
+			<textarea id="dump" rows="20" cols="80" disabled="true"></textarea>
+			<p/>
+			
+			<input  type="button" value="Login" onclick="login('name1', 'password1');"/>
+			<input  type="button" value="Logout" onclick="logout();"/>
+			<input  type="button" value="Register" onclick="register('vogelsang', 'password1', 'vogel@sang.de');"/>
+			<input  type="button" value="Find Users" onclick="findUsers('name1');"/>
+			<input  type="button" value="Find User" onclick="findUser('holger.vogelsang@web.de');"/>
+			<input  type="button" value="Friends of Users" onclick="friendsOf('name');"/>
+			<input  type="button" value="PictureInfos" onclick="getPictureInfos('*');"/>
+			<input  type="button" value="Load Scaled Picture" onclick="loadPicture(1, 100);"/>
+			<input  type="button" value="Load Picture" onclick="loadPicture(1, -1);"/>
+			<p/>
+			<input  id="fileupload" type="file" name="file" multiple="false"/>
+		</form>
+	</body>
+</html>

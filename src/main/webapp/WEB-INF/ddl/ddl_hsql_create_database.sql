@@ -1,0 +1,1 @@
+# Datenbank anlegen (geschieht automatisch beim Verbinden)

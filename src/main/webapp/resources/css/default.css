@@ -1,0 +1,4 @@
+/* Kleinere Schriftgroesse fuer die PrimeFaces-Widgets */
+.ui-widget {
+    font-size: 12px !important;
+}

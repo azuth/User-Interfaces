@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/pages/include/head.xhtml"></ui:include>
+<h:outputStylesheet library="css" name="default.css" />
+<h:outputScript name="js/jquery.fileupload.js"></h:outputScript>
+
+<h:body>
+	<h:form id="value_form" prependId="true">
+		<p:panel id="panel"
+			header="Kleine Primefaces-Demo #{daoController.message}"
+			style="margin-bottom:10px;">
+			<h:panelGrid columns="1" style="width: 100%">
+				<p:inputText id="value" value="#{daoController.value}" />
+				<p:commandButton value="Speichern"
+					action="#{daoController.update}" update="@form" />
+				<h:outputLabel id="output"
+					value="#{daoController.value == null ? 'nix' : daoController.message}" />
+				<p:galleria id="gallery" value="#{daoController.images}" var="img"
+					panelWidth="250" panelHeight="200" frameWidth="48" frameHeight="65"
+					effect="clip">
+
+					<p:graphicImage id="galleryimage"
+						value="#{daoController.image}" title="#{img.name}"
+						alt="#{img.name}">
+						<f:param name="id" value="#{img.id}" />
+					</p:graphicImage>
+				</p:galleria>
+			</h:panelGrid>
+		</p:panel>
+	</h:form>
+	<h:form>
+		<p:fileUpload fileUploadListener="#{daoController.handleFileUpload}"
+			mode="advanced" update="messages :value_form:panel" sizeLimit="100000000"
+			allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/" 
+			/>
+		<p:growl id="messages" showDetail="true" />
+
+	</h:form>
+</h:body>
+</html>

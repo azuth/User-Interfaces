@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<context:annotation-config />
+	<mvc:annotation-driven/> 
+	<context:component-scan base-package="de.hska.iwii" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*"/>
+		    <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+		        <property name="cacheSeconds" value="0"/>
+		        <property name="useExpiresHeader" value="true"/>
+		        <property name="useCacheControlHeader" value="true"/>
+		        <property name="useCacheControlNoStore" value="true"/>
+		    </bean>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="cacheSeconds" value="0" />
+    </bean>
+    
+	<!-- Configure the multipart resolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:maxUploadSize="10000000"/>
+
+</beans>
