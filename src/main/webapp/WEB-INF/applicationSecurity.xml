@@ -42,7 +42,7 @@
 	<security:http auto-config="true" use-expressions="true">
 		<security:form-login
 			login-processing-url="/j_spring_security_check"
-			login-page="/faces/pages/login.xhtml"
+			login-page="/faces/pages/public/login.xhtml"
 			default-target-url="/faces/pages/public/demo.xhtml"
 			authentication-failure-url="/faces/pages/login.xhtml"/>
 		<security:intercept-url pattern="/faces/login.xhtml" access="permitAll"/>

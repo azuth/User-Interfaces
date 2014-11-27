@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:include src="/pages/include/head.xhtml"></ui:include>
+	<h:outputStylesheet library="css" name="default.css"/>
+	<h:body onload="document.forms[0].elements['login:name'].focus()">
+		<script type="text/javascript">
+			function SetFocus () {
+				document.forms[0].elements["login:name"].focus();
+			}
+		</script>
+
+		<form id="login" method="post" action="/PictureCommunity/j_spring_security_check">
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" name="j_username"/></td>
+				</tr>
+				<tr>
+					<td>Passwort:</td>
+					<td><input type="password" name="j_password"/></td>
+				</tr>
+			</table>
+			<input name="submit" type="submit" value="Anmelden"/>
+		</form>
+	</h:body>
+</html>
