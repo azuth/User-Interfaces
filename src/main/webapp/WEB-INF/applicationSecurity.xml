@@ -45,7 +45,6 @@
 			login-page="/faces/pages/public/login.xhtml"
 			default-target-url="/faces/pages/public/demo.xhtml"
 			authentication-failure-url="/faces/pages/public/login.xhtml"/>
-		<security:intercept-url pattern="/faces/login.xhtml" access="permitAll"/>
 		<security:intercept-url pattern="/faces/pages/private/**" access="hasRole('user') or hasRole('admin')"/>
 		<security:intercept-url pattern="/faces/pages/admin/**" access="hasRole('admin')"/>
 		<security:intercept-url pattern="/faces/pages/public/**" access="permitAll"/>

@@ -14,15 +14,15 @@
         <div class="row marketing">
             <div class="col-md-4" />
             <div class="col-md-4 panel panel-default">
-				<form id="login" method="post" action="/PictureCommunity/j_spring_security_check">
+				<form id="login" method="post" action="${request.getContextPath()}/j_spring_security_check">
 					<h2 class="form-signin-heading">Please sign in</h2>
-					<label for="j_username" class="sr-only">Email address</label>
-					<input type="text" id="j_username" class="form-control" placeholder="Username"/>
-					<label for="j_password" class="sr-only">Password</label>
-					<input type="password" id="j_password" class="form-control" placeholder="Password"/>
+					<label for="username" class="sr-only">Email address</label>
+					<input type="text" id="username" name="j_username" class="form-control" placeholder="Username"/>
+					<label for="password" class="sr-only">Password</label>
+					<input type="password" id="password" name="j_password" class="form-control" placeholder="Password"/>
 					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 				</form>
-	            <p>Not yet a member? <h:link outcome="register.xhtml" value="Join Now!"/></p>
+	            <p>Not a member yet? <h:link outcome="register.xhtml" value="Register Now!"/></p>
 			</div>
             <div class="col-md-4" />
 		</div>
