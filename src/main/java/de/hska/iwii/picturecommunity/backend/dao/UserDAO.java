@@ -3,12 +3,9 @@ package de.hska.iwii.picturecommunity.backend.dao;
 import java.lang.ref.WeakReference;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -274,9 +271,44 @@ public class UserDAO extends AbstractDAO {
 			}
 			params.addValue("namePart", "%" + namePart + "%");
 		}
+        select += " ORDER BY name ASC";
 
 		return getNamedParameterJdbcTemplate().query(select, params, new UserRowMapper());
 	}
+
+    /**
+     * Sucht nach allen Anwendern, deren Name das uebergebene Namensfragment enthaelt.
+     * Beispiel: Namensfragment "gel" findet "Vogelsang", "Igel", usw.
+     * Gross- und Kleinschreibung werden nicht unterschieden.
+     * @param namePart Namensfragment, nach dem gesucht werden soll. Als Sonderfall ist der
+     * 			Name "*" zugelassen. Damit werden alle Anwender ermittelt.
+     * @param currentUser Anwender, der die Suche durchfuehrt. Sollte sein Name
+     * 			das uebergebene Fragment beinhalten, dann wird er nicht in die
+     * 			Liste der Treffer aufgenommen. Hat <code>currentUser</code>
+     * 			den Wert <code>null</code>, dann werden alle Treffer beruecksichtigt.
+     * @return Liste aller Anwender, deren Namen das Namensfragment enthalten.
+     */
+    public List<User> findUsersByNameCaseInsensitive(String namePart, User currentUser) {
+        String select = "SELECT * FROM member ";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        if (currentUser != null) {
+            select += " WHERE id != :id";
+            params.addValue("id", currentUser.getId());
+        }
+        if (!namePart.equals("*")) {
+            if (currentUser != null) {
+                select +=" AND UPPER(name) LIKE UPPER(:namePart)";
+            }
+            else {
+                select +=" WHERE UPPER(name) LIKE UPPER(:namePart)";
+            }
+            params.addValue("namePart", "%" + namePart + "%");
+        }
+        select += " ORDER BY UPPER(name)";
+
+        return getNamedParameterJdbcTemplate().query(select, params, new UserRowMapper());
+    }
 
 	/**
 	 * Sucht nach einen Anwender anhand seines Anmeldenamens.
@@ -350,12 +382,21 @@ public class UserDAO extends AbstractDAO {
 	 * @return Alle Anwender ermitteln, die vom uebergebenen Anwender als Freunde eingeladen wurden.
 	 */
 	public List<User> findFriendsOfUser(User user) {
-		String select = "SELECT * FROM member m, member_member mm WHERE m.id = mm.member_id and mm.friendsOf_id = " + user.getId();
-		
-		MapSqlParameterSource params = new MapSqlParameterSource();
+//		String select = "SELECT * FROM member m, member_member mm WHERE m.id = mm.member_id and mm.friendsOf_id = " + user.getId();
+        String select = "SELECT * FROM member m, member_member mm WHERE m.id = mm.friendsOf_id AND mm.member_id = "
+                + user.getId() + " ORDER BY UPPER(m.name)";
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
 
 		return getNamedParameterJdbcTemplate().query(select, params, new UserRowMapper());	
 	}
+
+    public int updateFriends(User user) {
+        List<User> friends = findFriendsOfUser(user);
+        Logger.getLogger(this.getClass().getName()).log(Level.WARNING, this.getClass().getName() + " friend size " + friends.size());
+        user.setFriendsOf(new HashSet<User>(friends));
+        return user.getFriendsOf().size();
+    }
 	
 	/** 
 	 * Ermittelt die Anwender, die am meisten Bilder angelegt haben.
@@ -367,7 +408,7 @@ public class UserDAO extends AbstractDAO {
 	 * 			Anzahl hochgeladener Bilder enthalten.
 	 */
 	public List<Map.Entry<User, Long>> getMostActiveUsers(int limit) {
-		String select = "SELECT m.id, m.email, m.password, m.role, m.name, count(m.id) AS cnt FROM member m, Picture p WHERE m.id = p.owner_id GROUP BY m.id ORDER BY count(m.id) DESC";
+		String select = "SELECT m.id, m.email, m.password, m.role, m.name, count(m.id) AS cnt FROM member m, picture p WHERE m.id = p.owner_id GROUP BY m.id ORDER BY count(m.id) DESC";
 		
 		if (limit > 0) {
 			select += " LIMIT " + limit;
@@ -389,6 +430,13 @@ public class UserDAO extends AbstractDAO {
 		String stmtUpdate = "DELETE FROM member_member WHERE member_id = " + user.getId();
 		getNamedParameterJdbcTemplate().update(stmtUpdate, params);
 
+                // delete user from other users friendsOf sets
+                stmtUpdate = "DELETE FROM member_member mm WHERE friendsOf_id = " + user.getId();
+                getNamedParameterJdbcTemplate().update(stmtUpdate, params);
+
+                // delete pictures
+                stmtUpdate = "DELETE FROM picture WHERE owner_id = " + user.getId();
+                getNamedParameterJdbcTemplate().update(stmtUpdate, params);
 		// Mich selbst loeschen.
 		stmtUpdate = "DELETE FROM member WHERE id = " + user.getId();
 		getNamedParameterJdbcTemplate().update(stmtUpdate, params);

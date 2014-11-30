@@ -1,16 +1,13 @@
 package de.hska.iwii.picturecommunity.backend.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class User implements UserDetails, Serializable {
+public class User implements UserDetails, Serializable, Comparable {
 	private static final long serialVersionUID = 2992954192934331599L;
 	public static final String ROLE_USER = "user";
 	public static final String ROLE_ADMIN = "admin";
@@ -133,6 +130,15 @@ public class User implements UserDetails, Serializable {
 		return friendsOf;
 	}
 
+    /**
+     * Add a new friend to this user.
+     * @param friend the friend to add
+     */
+    public void addFriend(User friend) {
+        if (friend == null) return;
+        friendsOf.add(friend);
+    }
+
 	/**
 	 * Namen des Anwenders auslesen.
 	 * @return Name des Anwenders.
@@ -246,4 +252,21 @@ public class User implements UserDetails, Serializable {
 	public boolean isEnabled() {
 		return true;
 	}
+
+    @Override
+    public int compareTo(Object o) {
+        return getName().compareTo(((User)o).getName());
+    }
+
+    public void setFriendsOf(Set<User> friendsOf) {
+        this.friendsOf = friendsOf;
+    }
+
+    /**
+     * Deletes a friend out of friendsMap.
+     * @param friend
+     */
+    public void delFriend(User friend) {
+        friendsOf.remove(friend);
+    }
 }

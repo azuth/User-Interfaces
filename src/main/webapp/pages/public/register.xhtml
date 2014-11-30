@@ -7,25 +7,70 @@
       xmlns:p="http://primefaces.org/ui">
 <body>
 <ui:composition template="/pages/include/global.tpl.xhtml">
-    <ui:define name="page_title">Login</ui:define>
-    <ui:param name="page_id" value="login"/>
+    <ui:define name="page_title">Register</ui:define>
+    <ui:param name="page_id" value="register"/>
     <ui:define name="content">
-       
         <div class="row marketing">
-            <div class="col-md-4" />
-            <div class="col-md-4 panel panel-default">
-				<form id="login" method="post" action="${request.getContextPath()}/j_spring_security_check">
-					<h2 class="form-signin-heading">Please sign in</h2>
-					<label for="username" class="sr-only">Email address</label>
-					<input type="text" id="username" name="j_username" class="form-control" placeholder="Username"/>
-					<label for="password" class="sr-only">Password</label>
-					<input type="password" id="password" name="j_password" class="form-control" placeholder="Password"/>
-					<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-				</form>
-	            <p>Not a member yet? <h:link outcome="register.xhtml" value="Register Now!"/></p>
-			</div>
-            <div class="col-md-4" />
-		</div>
+            <div class="col-md-2" />
+            <div class="col-md-8">
+                <h:form id="value_form" prependId="false">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+							<h2 class="form-signin-heading">Register</h2>
+                        </div>
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <p class="list-group-item-heading">
+                                        <p:inputText id="name" value="#{userController.user.name}" styleClass="form-control"
+                                                     placeholder="Your Username" validator="#{userController.validate}" />
+                                    </p>
+                                    <p class="list-group-item-danger">
+                                        <h:message for="name" showSummary="true"/>
+                                    </p>
+                                    <p class="list-group-item-text">
+                                        Please enter your desired username.
+                                    </p>
+                                </div>
+                                <div class="list-group-item">
+                                    <p class="list-group-item-heading">
+                                        <p:inputText id="email" value="#{userController.user.email}" styleClass="form-control"
+                                                     placeholder="Your Email" validator="#{userController.validate}" />
+                                    </p>
+                                    <p class="list-group-item-danger">
+                                        <h:message for="email" showSummary="true"/>
+                                    </p>
+                                    <p class="list-group-item-text">
+                                        Please enter your email.
+                                    </p>
+                                </div>
+                                <div class="list-group-item">
+                                    <p class="list-group-item-heading">
+                                        <h:inputSecret id="password" value="#{userController.user.password}"
+                                                       styleClass="form-control" placeholder="Password"
+                                                       validator="#{userController.validate}" />
+                                    </p>
+                                    <p class="list-group-item-danger">
+                                        <h:message for="password" showSummary="true"/>
+                                    </p>
+                                    <p class="list-group-item-text">
+                                        Enter a password.
+                                    </p>
+                                </div>
+                                <div class="list-group-item active">
+                                    <p class="list-group-item-heading">
+                                        <p:commandButton value="Register" actionListener="#{userController.registerVisitor}"
+                                                         update="@form" action="#{userController.register}"
+                                                         styleClass="btn btn-default" style="height: 34px"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <div class="col-md-2" />
+        </div>
 		
     </ui:define>
 </ui:composition>
