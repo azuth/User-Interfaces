@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core">
+<body>
+<ui:composition template="/pages/include/global.tpl.xhtml">
+  <ui:define name="page_title"><h:outputText value="#{profileController.user.name}" /></ui:define>
+
+  <ui:param name="page_id" value="userprofile_#{profileController.user.id}" />
+
+  <ui:define name="content">
+    <h2>Home of <h:outputText value="#{profileController.user.name}" /></h2>
+
+    <p>
+      Hi <h:outputText value="#{loginController.getInstance().name}" />, welcome to the profile page of <h:outputText value="#{profileController.user.name}" />
+    </p>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">My Pictures</h3>
+      </div>
+
+      <div class="panel-body">
+        <h:form id="gallery">
+          <p:dataGrid var="pic" value="#{pictureController.getPictures(profileController.user)}" columns="3" rows="12"
+                      paginator="true" id="content" emptyMessage="The user has no pictures."
+                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                      rowsPerPageTemplate="9,12,15">
+            <p:panel header="#{pic.name}" style="text-align:center">
+              <h:panelGrid columns="1" style="width:100%">
+                <p:commandLink update=":fullview:content" oncomplete="PF('fullPictureDialog').show()">
+                  <p:graphicImage value="#{pictureController.thumbnail}" title="#{pic.name}" alt="#{pic.description}">
+                    <f:param name="id" value="#{pic.id}" />
+                  </p:graphicImage>
+
+                  <f:setPropertyActionListener value="#{pic}" target="#{pictureController.selectedPicture}" />
+                </p:commandLink>
+
+                <c:if test="#{loginController.instance == profileController.user}">
+                  <p:commandLink update=":edit:content"
+                                 oncomplete="PF('editPictureDialog').show()">
+                    <h:outputText value="Edit" />
+
+                    <f:setPropertyActionListener value="#{pic}" target="#{pictureController.selectedPicture}" />
+                  </p:commandLink>
+                </c:if>
+              </h:panelGrid>
+            </p:panel>
+          </p:dataGrid>
+        </h:form>
+      </div>
+
+      <p:dialog header="Picture Details" widgetVar="editPictureDialog" modal="true">
+        <h:form id="edit">
+          <p:outputPanel id="content" style="text-align:center;">
+            <p:graphicImage value="#{pictureController.thumbnail}" title="#{pictureController.selectedPicture.name}"
+                            alt="#{pictureController.selectedPicture.description}">
+              <f:param name="id" value="#{pictureController.selectedPicture.id}" />
+            </p:graphicImage>
+
+            <h:panelGrid columns="1">
+              <h:outputText value="#{pictureController.selectedPicture.name}" />
+
+              <h:outputText value="#{pictureController.selectedPicture.creationDate}" />
+
+              <h:outputText value="#{pictureController.selectedPicture.description}" />
+
+              <p:selectBooleanButton value="#{pictureController.selectedPicture.publicVisible}" onLabel="Public"
+                                     offLabel="Private" />
+            </h:panelGrid>
+          </p:outputPanel>
+        </h:form>
+      </p:dialog>
+
+      <p:dialog header="#{pictureController.selectedPicture.name}" widgetVar="fullPictureDialog" modal="true">
+        <h:form id="fullview">
+          <p:outputPanel id="content">
+            <h:panelGrid style="text-align: center;">
+              <p:graphicImage value="#{pictureController.picture}" title="#{pictureController.selectedPicture.name}"
+                              alt="#{pictureController.selectedPicture.description}">
+                <f:param name="id" value="#{pictureController.selectedPicture.id}" />
+              </p:graphicImage>
+
+              <h:outputText value="Uploaded by #{pictureController.selectedPicture.owner.name} on #{pictureController.selectedPicture.creationDate}" />
+
+              <h:outputText value="#{pictureController.selectedPicture.description}" />
+            </h:panelGrid>
+          </p:outputPanel>
+        </h:form>
+      </p:dialog>
+
+      <c:if test="#{loginController.instance == profileController.user}">
+        <div class="panel-footer">
+          <h:form enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="pictureTitle">Title</label>
+
+              <p:inputText id="pictureTitle" class="form-control" value="#{pictureController.uploadTitle}" />
+            </div>
+
+            <div class="form-group">
+              <label for="pictureUpload">File</label>
+
+              <p:fileUpload id="pictureUpload" value="#{pictureController.uploadFile}" mode="simple"
+                            class="form-control-static" />
+            </div>
+
+            <div class="form-group">
+              <label for="pictureDescription">Description</label>
+
+              <p:inputTextarea id="pictureDescription" class="form-control"
+                               value="#{pictureController.uploadDescription}" />
+            </div>
+
+            <div class="form-group">
+              <label for="pictureVisibility">Visibility</label>
+
+              <p:selectBooleanButton id="pictureVisibility" value="#{pictureController.uploadPublic}" onLabel="Public"
+                                     offLabel="Private" class="form-control-static" />
+            </div>
+
+            <p:commandButton value="Upload" ajax="false" actionListener="#{pictureController.doUpload}" />
+          </h:form>
+        </div>
+      </c:if>
+    </div>
+  </ui:define>
+</ui:composition>
+</body>
+</html>

@@ -48,6 +48,7 @@
 					<ul class="nav navbar-nav">
 						<li class='${page_id == "home" ? "active" : ""}'><h:link outcome="/pages/private/home.xhtml" value="Home"/></li>
 						<li class='${page_id == "stuff" ? "active" : ""}'><h:link outcome="/pages/private/stuff.xhtml" value="Stuff"/></li>
+						<li class='${page_id == "users" ? "active" : ""}'><h:link outcome="/pages/public/users.xhtml" value="Users"/></li>
 						
 						<c:if test="#{!loginController.loggedIn}">
 							<li class='${page_id == "register" ? "active" : ""}'><h:link outcome="/pages/public/register.xhtml" value="Register"/></li>

@@ -130,7 +130,7 @@ public class UserController {
                             SPRING_SECURITY_CONTEXT_KEY,
                     SecurityContextHolder.getContext());
         }
-        return "/faces/pages/private/home.xhtml";
+        return "/faces/pages/private/registered.xhtml";
     }
 
     public Object registerVisitor() {
