@@ -51,8 +51,6 @@
 		</property>
 	</bean>
 
-	<bean id="daoController" class="de.hska.iwii.picturecommunity.controller.DAOController" scope="session"/>
-
 	<bean id="databaseInitalizer" class="de.hska.iwii.picturecommunity.backend.database.Initializer" scope="singleton">
 		<property name="dataSource" ref="pictureCommunityDataSource"/>
 		<property name="ddlCreateDatabaseFile" value="/WEB-INF/ddl/${pictureCommunity.ddlcreatedatabasefile}"/>
