@@ -20,8 +20,8 @@
 		<!-- Bootstrap -->
 		<h:outputStylesheet library="css" name="bootstrap.min.css"/>
 		<h:outputScript library="js" name="bootstrap.min.js"/>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		
+    	<h:outputScript library="primefaces" name="jquery/jquery.js" />
 		<h:outputStylesheet library="css" name="default.css"/>
 		
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -32,7 +32,7 @@
 		<![endif]-->
 	</h:head>
 	
-	<h:body>	
+	<h:body>
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
@@ -48,7 +48,7 @@
 					<ul class="nav navbar-nav">
 						
 						<c:if test="#{loginController.loggedIn}">
-							<li class='${page_id == "userprofile_#{loginController.username}" ? "active" : ""}'><h:link outcome="/pages/public/profile.xhtml?user=#{loginController.username}" value="Home"/></li>
+							<li class='${page_id == "userprofile_#{loginController.username}" ? "active" : ""}'><h:link outcome="/pages/public/profile.xhtml" value="Home"/></li>
 						</c:if>
 						
 						<li class='${page_id == "users" ? "active" : ""}'><h:link outcome="/pages/public/users.xhtml" value="Users"/></li>

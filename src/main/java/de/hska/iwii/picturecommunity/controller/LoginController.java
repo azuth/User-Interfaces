@@ -27,7 +27,6 @@ public class LoginController {
     @Autowired
     private UserDAO userDAO;
 
-
     private static Set<User> onlineTracker = new HashSet<>();
 
     /**

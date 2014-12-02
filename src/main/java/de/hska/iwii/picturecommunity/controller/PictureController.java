@@ -133,9 +133,16 @@ public class PictureController {
             return new DefaultStreamedContent();
         } else {
             String id = ctx.getExternalContext().getRequestParameterMap().get("id");
-            Picture pic = pictureDAO.getPicture(Integer.parseInt(id));
+            try
+            {
+                Picture pic = pictureDAO.getPicture(Integer.parseInt(id));
 
-            return new DefaultStreamedContent(new ByteArrayInputStream(pic.getData()));
+                return new DefaultStreamedContent(new ByteArrayInputStream(pic.getData()));
+            }
+            catch (NumberFormatException e)
+            {
+            	return null;
+            }
         }
     }
 
@@ -222,7 +229,7 @@ public class PictureController {
             logger.warn("invalid picture id " + idstr);
         }
         logger.info("no picture");
-        return new DefaultStreamedContent();
+        return null;
     }
 
 }

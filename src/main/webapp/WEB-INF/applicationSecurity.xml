@@ -43,7 +43,7 @@
 		<security:form-login
 			login-processing-url="/j_spring_security_check"
 			login-page="/faces/pages/public/login.xhtml"
-			default-target-url="/faces/pages/private/home.xhtml"
+			default-target-url="/faces/pages/public/profile.xhtml"
 			authentication-failure-url="/faces/pages/public/login.xhtml"/>
         <security:logout
 			logout-url="/j_spring_security_logout"
