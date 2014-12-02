@@ -46,8 +46,11 @@
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class='${page_id == "home" ? "active" : ""}'><h:link outcome="/pages/private/home.xhtml" value="Home"/></li>
-						<li class='${page_id == "stuff" ? "active" : ""}'><h:link outcome="/pages/private/stuff.xhtml" value="Stuff"/></li>
+						
+						<c:if test="#{loginController.loggedIn}">
+							<li class='${page_id == "userprofile_#{loginController.username}" ? "active" : ""}'><h:link outcome="/pages/public/profile.xhtml?user=#{loginController.username}" value="Home"/></li>
+						</c:if>
+						
 						<li class='${page_id == "users" ? "active" : ""}'><h:link outcome="/pages/public/users.xhtml" value="Users"/></li>
 						
 						<c:if test="#{!loginController.loggedIn}">
