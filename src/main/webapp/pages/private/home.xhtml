@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+	<meta HTTP-EQUIV="REFRESH" content="0; url=${request.getContextPath()}/faces/pages/public/profile.xhtml?user=#{loginController.username}"/>
+</head>
+<body>
+<ui:composition template="/pages/include/global.tpl.xhtml">
+    <ui:define name="page_title">Registration complete</ui:define>
+    <ui:param name="page_id" value=""/>
+    <ui:define name="content">
+
+		<script language="javascript">
+			window.location.href = "${request.getContextPath()}/faces/pages/public/profile.xhtml?user=#{loginController.username}";
+		</script>
+       
+        <div class="row marketing">
+            <div class="col-md-4" />
+            <div class="col-md-4 panel panel-default">
+				<div>Redirecting to <a href="${request.getContextPath()}/faces/pages/public/profile.xhtml?user=#{loginController.username}">user profile</a></div>
+			</div>
+            <div class="col-md-4" />
+		</div>
+		
+    </ui:define>
+</ui:composition>
+</body>
+</html>

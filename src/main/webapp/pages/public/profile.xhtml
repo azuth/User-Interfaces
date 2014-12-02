@@ -21,7 +21,7 @@
 			
 		      Hi <h:outputText value="#{loginController.username}" />, welcome to 
 				<c:choose>
-					<c:when test="#{loginController.username == profileController.user.name}"><b>your profile!</b></c:when>
+					<c:when test="#{loginController.instance == profileController.user}"><b>your profile!</b></c:when>
 					<c:otherwise>the profile page of <b><h:outputText value="#{profileController.user.name}" /></b></c:otherwise>
 				</c:choose>
 			</c:when>
