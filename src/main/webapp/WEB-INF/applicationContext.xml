@@ -50,7 +50,17 @@
 			</bean>
 		</property>
 	</bean>
-
+	
+  <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+    <property name="scopes">
+      <map>
+        <entry key="view">
+          <bean class="de.hska.iwii.picturecommunity.spring.ViewScope" />
+        </entry>
+      </map>
+    </property>
+  </bean>
+  
 	<bean id="databaseInitalizer" class="de.hska.iwii.picturecommunity.backend.database.Initializer" scope="singleton">
 		<property name="dataSource" ref="pictureCommunityDataSource"/>
 		<property name="ddlCreateDatabaseFile" value="/WEB-INF/ddl/${pictureCommunity.ddlcreatedatabasefile}"/>

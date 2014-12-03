@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @Component
-@Scope("session")
+@Scope("view")
 public class PictureController {
 
     static final int THUMBNAIL_SIZE = 100;
