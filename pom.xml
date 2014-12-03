@@ -20,6 +20,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<athmosphere.version>[2.1.1,)</athmosphere.version>
 		<spring.version>4.1.0.RELEASE</spring.version>
 		<spring-security.version>3.2.5.RELEASE</spring-security.version>
 		<primefaces.version>5.0</primefaces.version>
@@ -75,6 +76,11 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-runtime</artifactId>
+			<version>${athmosphere.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
