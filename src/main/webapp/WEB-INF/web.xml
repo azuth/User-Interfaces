@@ -8,7 +8,7 @@
 		<welcome-file>default.html</welcome-file>
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
-		<welcome-file>/faces/login.xhtml</welcome-file>
+		<welcome-file>/faces/pages/public/index.xhtml</welcome-file>
 	</welcome-file-list>
 	<servlet>
 		<servlet-name>FacesServlet</servlet-name>
@@ -44,7 +44,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>aristo</param-value>
+		<param-value>bootstrap</param-value>
 	</context-param>
 	<!-- Nur fuer Jetty -->
 	<listener>

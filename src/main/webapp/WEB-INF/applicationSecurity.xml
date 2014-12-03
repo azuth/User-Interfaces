@@ -55,6 +55,6 @@
 		<security:intercept-url pattern="/faces/pages/public/**" access="permitAll"/>
 		<security:intercept-url pattern="/pages/rest/**" access="permitAll"/>
 		<security:intercept-url pattern="/primepush/**" access="permitAll"/>
-		<security:access-denied-handler error-page="/faces/pages/login.xhtml"/>
+		<security:access-denied-handler error-page="/faces/pages/public/login.xhtml"/>
 	</security:http>
 </beans>

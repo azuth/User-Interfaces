@@ -34,8 +34,8 @@ public class LogoutHandler extends SimpleUrlLogoutSuccessHandler {
         PushContext pushContext = PushContextFactory.getDefault().getPushContext();
         pushContext.push("/logout_channel", user.getName());
 
-        this.setDefaultTargetUrl("/faces/pages/public/index.xhtml");
-		this.setTargetUrlParameter("/faces/pages/public/index.xhtml");
+        this.setDefaultTargetUrl("/faces/pages/public/login.xhtml");
+		this.setTargetUrlParameter("/faces/pages/public/login.xhtml");
 
 		LoginController.loggedOut(user);
 
