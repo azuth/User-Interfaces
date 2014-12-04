@@ -40,6 +40,15 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>bootstrap</param-value>
 	</context-param>
+	
+
+    <servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
+    <async-supported>true</async-supported>
+	<init-param>
+		<param-name>org.atmosphere.useNative</param-name>
+		<param-value>true</param-value>
+	</init-param>
+    
 	<!-- Nur fuer Jetty -->
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
