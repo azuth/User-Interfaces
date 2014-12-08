@@ -141,7 +141,7 @@ public class PictureController {
             }
             catch (NumberFormatException e)
             {
-            	return null;
+            	return new DefaultStreamedContent();
             }
         }
     }
@@ -202,7 +202,9 @@ public class PictureController {
         FacesContext ctx = FacesContext.getCurrentInstance();
 
         logger.info("getThumbnail");
-        if (ctx.getCurrentPhaseId() != PhaseId.RENDER_RESPONSE) {
+        if (ctx.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+        	return new DefaultStreamedContent();
+        }else{
             byte[] d;
             logger.info("getting id…");
             String idstr = ctx.getExternalContext().getRequestParameterMap().get("id");
@@ -229,7 +231,7 @@ public class PictureController {
             logger.warn("invalid picture id " + idstr);
         }
         logger.info("no picture");
-        return null;
+        return new DefaultStreamedContent();
     }
 
 }
