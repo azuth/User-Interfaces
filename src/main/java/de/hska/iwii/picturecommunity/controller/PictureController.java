@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @Component
-@Scope("view")
+@Scope("request")
 public class PictureController {
 
     static final int THUMBNAIL_SIZE = 100;
@@ -130,7 +130,7 @@ public class PictureController {
 
         if (ctx.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 
-            return new DefaultStreamedContent();
+            return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
         } else {
             String id = ctx.getExternalContext().getRequestParameterMap().get("id");
             try
@@ -141,7 +141,7 @@ public class PictureController {
             }
             catch (NumberFormatException e)
             {
-            	return new DefaultStreamedContent();
+            	return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
             }
         }
     }
@@ -203,7 +203,7 @@ public class PictureController {
 
         logger.info("getThumbnail");
         if (ctx.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-        	return new DefaultStreamedContent();
+        	return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
         }else{
             byte[] d;
             logger.info("getting id…");
@@ -231,7 +231,7 @@ public class PictureController {
             logger.warn("invalid picture id " + idstr);
         }
         logger.info("no picture");
-        return new DefaultStreamedContent();
+        return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]));
     }
 
 }
