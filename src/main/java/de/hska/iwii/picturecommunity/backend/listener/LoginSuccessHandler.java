@@ -39,9 +39,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         Logger log = Logger.getLogger(this.getClass().getName());
         User user = (User)authentication.getPrincipal();
         log.log(Level.INFO, "Login event catched: " + user.getName());
-
-        PushContext pushContext = PushContextFactory.getDefault().getPushContext();
-        pushContext.push("/login_channel", user.getName());
 		
         LoginController.loggedIn(user);
 
