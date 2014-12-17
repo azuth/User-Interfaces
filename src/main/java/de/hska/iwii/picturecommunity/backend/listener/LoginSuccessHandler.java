@@ -41,6 +41,5 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         log.log(Level.INFO, "Login event catched: " + user.getName());
 		
         LoginController.loggedIn(user);
-
     }
 }
