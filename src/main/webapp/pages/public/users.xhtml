@@ -14,21 +14,21 @@
         <div class="row marketing">
             <div class="col-md-12">
                 <h3>Users</h3>
-                <p:dataList emptyMessage="Leider ist bisher Niemand angemeldet." var="user" id="usersview" type="none"
+                <p:dataList emptyMessage="No users yet!" var="user" id="usersview" type="none"
                             value="#{userController.allUsers}" paginator="true" rows="15"
                             styleClass="list-group" rowsPerPageTemplate="5,15,50,100"
                             paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}">
-                    <f:facet name="header">Benutzer</f:facet>
+                    <f:facet name="header">User</f:facet>
 
                     <li class="list-group-item" style="height: 44px; vertical-align: middle">
-                        <h:link outcome="/pages/public/profile.xhtml"  value="#{user.name}" style="height: 40px; display: block;">
+                        <h:link outcome="/pages/public/profile.xhtml"  value="#{user.name}" style="height: 40px;">
                             <f:param name="user" value="#{user.name}"/>
                         </h:link>
-
+                        
                         <c:if test="#{loginController.adminUser}">
                             <p:commandButton actionListener="#{adminController.delUser(user.id)}"
-                                             update=":usersview,:friendsview" styleClass="pull-right"
-                                             icon="ui-icon-minus" style="height: 26px;" value="löschen"/>
+                                             update=":usersview" styleClass="pull-right btn btn-danger"
+                                             icon="ui-icon-minus" style="height: 26px;" value="delete"/>
                         </c:if>
                     </li>
                 </p:dataList>

@@ -62,6 +62,15 @@
 							<li class=''><h:outputLink value="#{request.contextPath}/j_spring_security_logout">Logout</h:outputLink></li>
 						</c:if>
 						
+		                <c:if test="#{loginController.adminUser}">
+		                    <li class="dropdown">
+		                        <a id="drop_admin" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+		                        <ul class="dropdown-menu" role="menu" aria-labelledby="drop_admin">
+		                            <li role="presentation"><h:link outcome="/pages/admin/topuploader.xhtml" value="Top Uploader"/></li>
+		                        </ul>
+		                    </li>
+		                </c:if>
+						
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>
