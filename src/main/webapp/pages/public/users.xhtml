@@ -26,8 +26,8 @@
                         </h:link>
                         
                         <c:if test="#{loginController.adminUser}">
-                            <p:commandButton actionListener="#{adminController.delUser(user.id)}"
-                                             update=":usersview" styleClass="pull-right btn btn-danger"
+                            <p:commandButton actionListener="#{adminController.delUser(user.id)}" type="submit"
+                                             update=":usersview,:friendsview" styleClass="pull-right btn btn-danger"
                                              icon="ui-icon-minus" style="height: 26px;" value="delete"/>
                         </c:if>
                     </li>
