@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://xmlns.jcp.org/jsf/html"
+     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+     xmlns:f="http://xmlns.jcp.org/jsf/core"
+     xmlns:c="http://java.sun.com/jstl/core"
+     xmlns:p="http://primefaces.org/ui">
+    <p:dataList emptyMessage="You don't have any friends. :("
+                value="#{loginController.friends}"
+                var="friend"
+                id="friendsview"
+                type="none"
+                paginator="true" rows="5"
+                paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
+                styleClass="list-group">
+        <f:facet name="header">Friends</f:facet>
+
+        <li class="list-group-item" style="height: 44px; vertical-align: middle">
+
+            <c:if test="#{friend.online}">
+                ONLINE!
+            </c:if>
+
+            <h:link outcome="/pages/public/profile.xhtml"  value="#{friend.user.name}"
+                    style='${friend.online ? "color: green;" : ""}'>
+                <f:param name="user" value="#{friend.user.name}"/>
+            </h:link>
+
+            <p:commandButton actionListener="#{userController.delFriend}" update=":friendsview" type="submit"
+                             styleClass="pull-right" icon="ui-icon-minus" style="height: 26px;">
+                <f:param name="userId" value="#{friend.user.id}"/>
+            </p:commandButton>
+        </li>
+
+        <f:facet name="footer">
+            <h:form>
+                <p:autoComplete id="addfriend" title="Add Friend" size="18" placeholder="Add Friend"
+                                value="#{userController.friendName}" forceSelection="true"
+                                completeMethod="#{userController.completionMethod}" style="height:26px;"/>
+                <p:commandButton actionListener="#{userController.addFriend}" type="submit"
+                                 update="@form,:friendsview" style="height: 26px;" icon="ui-icon-plus"
+                                 styleClass="pull-right" />
+            </h:form>
+        </f:facet>
+    </p:dataList>
+
+
+    <p:growl id="growl" showDetail="true" sticky="true" widgetVar="g"  />
+
+    <script type="text/javascript">
+        function handleLoginMessage(data) {
+            PrimeFaces.ab({source:'friendsview:j_idt65:j_idt66',update:'friendsview:j_idt65 friendsview'});
+            g.renderMessage({summary:'Login', detail: "User " + data + " logged on", severity: 'info'});
+        }
+    </script>
+    <p:socket onMessage="handleLoginMessage" channel="/login_channel" />
+
+    <script type="text/javascript">
+        function handleLogoutMessage(data) {
+            PrimeFaces.ab({source:'friendsview:j_idt65:j_idt66',update:'friendsview:j_idt65 friendsview'});
+            g.renderMessage({summary:'Logout', detail: "User " + data + " logged off.", severity: 'info'});
+        }
+    </script>
+    <p:socket onMessage="handleLogoutMessage" channel="/logout_channel" />
+</div>

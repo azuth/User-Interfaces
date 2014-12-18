@@ -79,6 +79,12 @@
 		<!--  Content -->
 		<div class="container">
 			<ui:insert name="content"/>
+			<div class="col-md-3">
+				<p/>
+				<c:if test="#{loginController.loggedIn}">
+					<ui:include src="/pages/include/friends.tpl.xhtml"/>
+				</c:if>
+			</div>
 		</div>
 			  
 	</h:body>
