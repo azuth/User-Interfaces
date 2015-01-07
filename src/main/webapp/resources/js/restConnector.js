@@ -2,14 +2,20 @@ $.ajaxSetup({
 	cache: false,
 	statusCode: {
 		401: function(){
-			$('#warningInfo').fadeIn(300);
-			$('#warningInfo div div').empty().append(				
+			$('#info').fadeIn(300);
+			$('#info div div').attr("class", "alert alert-danger");
+			$('#info div div').empty().append(				
 					"<strong>No Authentication.</strong> "
 					+"Please  <a href=\"#login\">sign in</a>. "
 					+"Not a member yet? <a href=\"#register\">Register Now!</a>");
+			
 		},
 		201: function(){
-			alert("created User");
+			
+			$('#info').fadeIn(300);
+			$('#info div div').attr("class", "alert alert-success");
+			$('#info div div').empty().append(				
+					"Created User");
 		},
 		403: function(){
 			
@@ -18,7 +24,11 @@ $.ajaxSetup({
 			alert("Username is already registered\nChoose another.");
 		},
 		409: function(){
-			alert("Username is already registered\nChoose another.");
+			$('#info').fadeIn(300);
+			$('#info div div').attr("class", "alert alert-danger");
+			$('#info div div').empty().append(				
+					"<strong>Username already taken.</strong> "
+					+"Please choose another.");
 		}
 	}
 });
@@ -70,11 +80,14 @@ function logout() {
 }
 
 /* Einen neuen Anwender anmelden */
+/* funtioniert nur wenn entweder authorizations im header noch nicht gesetzt(auch nicht leer gesetzt ist) ist 
+ * oder man eingelogged ist*/
 function register(name, password, mail) {
 	var senddata={ username : name, password : password, mailaddress: mail };
-	$.post('/PictureCommunity/REST/register', senddata, function(data) {
-		dumpData(data);
-	});
+	$.post('/PictureCommunity/REST/register', senddata, function(data) {})
+		.done(function(data){
+				login(name, password);
+			});
 }
 
 /* Sucht den Anwender, dessen Anmeldenamen die Zeichenkette name enthaelt. */

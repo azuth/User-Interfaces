@@ -63,7 +63,7 @@
 			</div>
 		</nav>
 		
-		<div id="warningInfo" class="container contentPage">
+		<div id="info" class="container contentPage">
 			<div class="row ">
 				<div class="alert alert-danger" role="alert">
 	
@@ -76,7 +76,7 @@
 			<div class="row ">
 	            <div class="col-md-4 "></div>
 	            <div class="col-md-4 panel panel-default">
-					<form id="register" method="post" action="#home">
+					<!--  <form id="register" method="get" action="#home">-->
 						<h2 class="form-signin-heading">Please register</h2>
 						
 						<label for="r_username" class="sr-only">Username</label>
@@ -89,8 +89,8 @@
 						<input type="password" id="r_password" name="r_password" class="form-control" placeholder="Password"/>
 						
 						
-						<button class="btn btn-lg btn-primary btn-block">Register</button>
-					</form>
+						<button class="btn btn-lg btn-primary btn-block" onClick="tryRegistration();">Register</button>
+					<!--</form>-->
 					<p> </p><!--to do: fix Layout!!! -->
 				</div>
 	            <div class="col-md-4"></div>
@@ -103,7 +103,7 @@
 			<div class="row">
 	            <div class="col-md-4"></div>
 	            <div class="col-md-4 panel panel-default">
-					<form id="login" method="get" action="#home">
+					<!--<form id="login" method="get" action="#home"> -->
 						<h2 class="form-signin-heading">Please sign in</h2>
 						
 						<label for="l_username" class="sr-only">Email address</label>
@@ -113,7 +113,7 @@
 						<input  type="password" id="l_password" name="password" class="form-control" placeholder="Password"/>
 						
 						<button class="btn btn-lg btn-primary btn-block" onClick="tryLogin();">Sign in</button>
-					 </form>
+					 <!--</form> -->
 		            <p>Not a member yet? <a href="#register">Register Now!</a></p>
 				</div>
 	            <div class="col-md-4"></div>
@@ -167,9 +167,18 @@
 				login($("#l_username").val() ,$("#l_password").val() );
 
 				//window.location.search = "?"+jQuery.param({username:$("#l_username").val()},true );
+				
+				window.location.hash = "home";
 				locationHashChanged();
 				
 			}
+			
+			function tryRegistration(){
+				register($("#r_username").val(), $("#r_password").val(), $("#r_email").val())
+				//window.location.hash = "home";
+				//locationHashChanged();
+			}
+			
 			
 			function loadHomeGallery(name){
 				$("#gallery").empty();
@@ -202,7 +211,10 @@
 					window.location.search = "";
 					logout();
 					console.log("loging out");
-					window.location.hash = "register";
+					$('#info').fadeIn(300);
+					$('#info div div').attr("class", "alert alert-warning");
+					$('#info div div').empty().append(				
+							"Logged out.");
 					
 				}else if(location.hash === "#login"){
 					$("#loginPage").show();
