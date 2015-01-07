@@ -126,7 +126,10 @@
    			<div class="row ">
 
 	            <div class=" panel panel-default">
-	            		<h2 >My Pictures</h2>		
+	            	<div class="panel-heading">
+	            			<h3 >My Pictures</h3>		
+					</div>
+	            			
 					  <div id="gallery" class="row">
 					  	<!--  
 					    <div class="col-lg-2 col-sm-3 col-xs-4">
@@ -143,23 +146,43 @@
 					    </div>
 					  </div>
 						-->
-		            <p>Not a member yet? <a href="#register">Register Now!</a></p>
+
 				</div>
-				
 
 	         </div>   
 			</div>
 			<div id="uploadPanel" class="row ">
 
-	            <div class=" panel panel-default">
-	            		<h2 class="">Upload Images</h2>		
-					  <div id="gallery" class="row">
-
-			            
-					</div>
-					<p>dummy</p>
-
-			
+	            <div class="panel panel-default">
+	            		<div class="panel-heading">
+	            			<h3 class="">Upload Images</h3>		
+						</div>
+						<div class="panel-body">
+						 	<label for="u_title" class="sr-only">Title</label>
+							<input type="text" id="u_title" name="u_title" class="form-control" placeholder="Title"/>
+							
+							<label for="u_description" class="sr-only">Description</label>
+							<input type="text" id="u_description" name="u_description" class="form-control" placeholder="Description"/>
+							
+							<button class="btn btn-lg btn-primary btn-block" onClick="">Upload</button>
+						</div>
+				</div>
+			</div>
+   		</div> <!-- /container -->
+   		
+   		
+   		<div id="imagePage" class="container contentPage">
+   			<div class="panel panel-default">
+	            		<div class="panel-heading">
+	            			<h3 class="">Title</h3>		
+						</div>
+						<div id="imageContent" class="panel-body">
+						      
+						      	<div class="caption">
+							        <p>...</p>
+								</div>
+						</div>	
+				</div>
    		</div> <!-- /container -->
 	
 		<script>	
@@ -175,8 +198,26 @@
 			
 			function tryRegistration(){
 				register($("#r_username").val(), $("#r_password").val(), $("#r_email").val())
-				//window.location.hash = "home";
-				//locationHashChanged();
+			}
+			
+			function loadImagePage(){
+				var c = function (data){
+					imageId = GetURLParameter("imageId");
+					
+					if( data.length > 0 && imageId != ""){
+
+						
+						$.each(data, function(key, imageObjct) {
+	
+							if(imageObjct.id == imageId){
+								$('#imagePage h3').empty().append(imageObjct.name);
+								loadPicture($('#imageContent'),imageObjct.id, -1,"img-responsive"); 
+								$('#imagePage p').empty().append(imageObjct.description);
+							}
+						});
+					}
+				}
+				getPictureInfos("*", c); // fixed because private pictures error (login problems)
 			}
 			
 			
@@ -190,14 +231,12 @@
 						$("#gallery").empty();
 						$.each(data, function(key, imageObjct) {
 	
-	
 							var div = document.createElement('div');
 							div.setAttribute("class", "col-lg-2 col-sm-3 col-xs-4");
-							$(div).append("<a id=\""+imageObjct.id+"\" href=\"#image\">" +"</a>");
-							$(div).append("<a href=\"#edit\">edit</a>")
+							$(div).append("<a id=\""+imageObjct.id+"\" href=\"?imageId="+imageObjct.id+"#image\">" +"</a>");
 							loadPicture($('a:first',div),imageObjct.id, 200,"thumbnail img-responsive"); 
 							$(div).appendTo("#gallery");
-							$("#gallery").insertAttr("class","row");
+							$("#gallery").attr("class","panel-body");
 						});
 					}
 				}
@@ -214,7 +253,7 @@
 					$('#info').fadeIn(300);
 					$('#info div div').attr("class", "alert alert-warning");
 					$('#info div div').empty().append(				
-							"Logged out.");
+							"<strong>Logged out!</strong> Pfiat di.");
 					
 				}else if(location.hash === "#login"){
 					$("#loginPage").show();
@@ -229,15 +268,18 @@
 					//}
 					loadHomeGallery(user);
 					$("#homePage").show();
-					
+				}else if(location.hash === "#image"){
+					loadImagePage();
+					$("#imagePage").show();	
 				}else{
 					window.location.hash = "register";
 				}
 			}
 			
 			window.addEventListener("hashchange", locationHashChanged, false);
-
+			
 			window.addEventListener("load", function(){
+				//checkAuthorization()
 				locationHashChanged();
 			});
 			

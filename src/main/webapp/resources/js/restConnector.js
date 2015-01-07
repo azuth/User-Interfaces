@@ -2,6 +2,7 @@ $.ajaxSetup({
 	cache: false,
 	statusCode: {
 		401: function(){
+			$(".contentPage").hide();
 			$('#info').fadeIn(300);
 			$('#info div div').attr("class", "alert alert-danger");
 			$('#info div div').empty().append(				
@@ -15,7 +16,7 @@ $.ajaxSetup({
 			$('#info').fadeIn(300);
 			$('#info div div').attr("class", "alert alert-success");
 			$('#info div div').empty().append(				
-					"Created User");
+					"<strong>Created new User</strong> and logged in.");
 		},
 		403: function(){
 			
@@ -55,8 +56,8 @@ function login(name, password) {
 }
 
 /* checking login*/
-function checkAuthorization(name) {
-	$.getJSON('/PictureCommunity/REST/user/friends/' + name)
+function checkAuthorization() {
+	$.getJSON('/PictureCommunity/REST/user/friends/' + 'a')
 		.fail(function(jqxhr, textStatus, error) {
 			//$("#dump").append(error + "<br/>\n");
 			console.log(error);
