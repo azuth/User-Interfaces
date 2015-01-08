@@ -7,8 +7,8 @@ $.ajaxSetup({
 			$('#info div div').attr("class", "alert alert-danger");
 			$('#info div div').empty().append(				
 					"<strong>No Authentication.</strong> "
-					+"Please  <a href=\"#login\">sign in</a>. "
-					+"Not a member yet? <a href=\"#register\">Register Now!</a>");
+					+"Please  <a href=\"#login\" class=\"alert-link\">sign in</a>. "
+					+"Not a member yet? <a href=\"#register\" class=\"alert-link\">Register Now!</a>");
 			
 		},
 		201: function(){
@@ -154,9 +154,3 @@ function loadPicture(parentNode,id, width,classattr) {
 		img.setAttribute("class", classattr);
 	}
 }
-
-$(function () {
-    $('#fileupload').fileupload({url: '/PictureCommunity/REST/newpicture', formData: function(form) {
-		return [{ name: 'description', value: 'Ein perfektes Bild eines Meisters'}, { name: 'public', value: true }]; 
-	}});
-});
