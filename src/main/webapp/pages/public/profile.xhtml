@@ -18,7 +18,7 @@
 		<c:choose>
 			<c:when test="#{profileController.user == null}"><b>an invalid profile!</b></c:when>
 			<c:when test="#{loginController.loggedIn}">
-		      Hi du <h:outputText value="#{loginController.username}" />, welcome to 
+		      Hi <h:outputText value="#{loginController.username}" />, welcome to 
 				<c:choose>
 					<c:when test="#{loginController.instance == profileController.user}"><b>your profile!</b></c:when>
 					<c:otherwise>the profile page of <b><h:outputText value="#{profileController.user.name}" /></b></c:otherwise>
@@ -37,6 +37,7 @@
 			      </div>
 			
 			      <div class="panel-body">
+			      
 			        <h:form id="gallery">
 			          <p:dataGrid var="pic" value="#{pictureController.getPictures(profileController.user)}" columns="3" rows="12"
 			                      paginator="true" id="content" emptyMessage="The user has no pictures."
@@ -45,13 +46,14 @@
 			            <p:panel header="#{pic.name}" style="text-align:center">
 			              <h:panelGrid columns="1" style="width:100%">
 			                <p:commandLink update=":fullview:content" oncomplete="PF('fullPictureDialog').show()">
+			                  <f:param name="user" value="#{profileController.user.name}" />
 			                  <p:graphicImage value="#{pictureController.thumbnail}" title="#{pic.name}" alt="#{pic.description}">
 			                    <f:param name="id" value="#{pic.id}" />
 			                  </p:graphicImage>
 			
 			                  <f:setPropertyActionListener value="#{pic}" target="#{pictureController.selectedPicture}" />
 			                </p:commandLink>
-			
+			                
 			                <c:if test="#{loginController.instance == profileController.user}">
 			                  <p:commandLink update=":edit:content"
 			                                 oncomplete="PF('editPictureDialog').show()">
