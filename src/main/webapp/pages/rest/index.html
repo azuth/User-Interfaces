@@ -130,7 +130,7 @@
 	            			<h3 >My Pictures</h3>		
 					</div>
 	            			
-					  <div id="gallery" class="row">
+			  		<div id="gallery" class="row">
 					  	<!--  
 					    <div class="col-lg-2 col-sm-3 col-xs-4">
 					        <a href="#">
@@ -144,12 +144,10 @@
 					        </a>
 					        <a href="#edit">edit</a>
 					    </div>
-					  </div>
 						-->
 
-				</div>
-
-	         </div>   
+					</div>
+	         	</div>   
 			</div>
 			<div id="uploadPanel" class="row ">
 
@@ -160,18 +158,24 @@
 						<div class="panel-body">
 							
 							 	<label for="u_title" class="sr-only">Title</label>
-								<input type="text" id="u_title" name="u_title" class="form-control" placeholder="Title"/>
+								<input type="text" id="u_title" name="title" class="form-control" placeholder="Title"/>
 								
 								<label for="u_description" class="sr-only">Description</label>
-								<textarea id="u_description" name="u_description" class="form-control " placeholder="Description" rows="3" ></textarea>
+								<textarea id="u_description" name="description" class="form-control " placeholder="Description" rows="3" ></textarea>
 								
+
+					  			<label for="u_visibility" class="sr-only">Visibility</label>
+						  		<select class="form-control" id="u_visibility" name="public">
+						    		<option selected value="true" >public</option>
+						    		<option value="false" >private</option>
+					  			</select>
+								<form >	
 								<label for="u_file" class="sr-only">Select File</label>
-								<!--<input type="file" id="u_file" name="u_file" class="form-control" placeholder="File" multiple="false"/>-->
-							<form >	
-								<input  id="fileupload" type="file" name="file" multiple="false"/>
-							</form>
-								<!--  <button id="u_button" class="btn btn-lg btn-primary class="form-control"" onClick="uploadFile()">Upload</button> -->
-							
+								<input type="file" id="u_file" name="file" class="form-control" placeholder="File" multiple="false"/>
+								</form>
+							<!--  								
+								<button id="u_button" class="btn btn-lg btn-primary class="form-control">Upload</button> 
+							-->
 						</div>
 				</div>
 			</div>
@@ -213,7 +217,6 @@
 				
 				window.location.hash = "home";
 				locationHashChanged();
-				
 			}
 			
 			function tryRegistration(){
@@ -263,18 +266,17 @@
 				getPictureInfos(name, c);
 			}
 					
-			function locationHashChanged() {
+			function locationHashChanged(callback) {
 				$(".contentPage").hide();
 				
 				if(location.hash === "#logout"){
-					window.location.search = "";
 					logout();
+					window.location.search = "";
 					console.log("loging out");
 					$('#info').fadeIn(300);
 					$('#info div div').attr("class", "alert alert-warning");
 					$('#info div div').empty().append(				
 							"<strong>Logged out!</strong> Pfiat di.");
-					
 				}else if(location.hash === "#login"){
 					$("#loginPage").show();
 					
@@ -294,6 +296,7 @@
 				}else{
 					window.location.hash = "register";
 				}
+				callback();
 			}
 			
 			window.addEventListener("hashchange", locationHashChanged, false);
@@ -314,26 +317,24 @@
 					}
 				}
 			}
-			/*
-			function uploadFile() {
+			
+		    $('#u_file').fileupload({url: '/PictureCommunity/REST/newpicture', 
+		    		formData: function(form) {
+						return [{ name: 'title', value: $('#u_title').val()},
+						        { name: 'description', value: $('#u_description').val()},
+						        { name: 'public', value: $('#u_visibility').val() }]; 
+					},
+					done: function (e, data) {
+						 locationHashChanged(function(){
+						 
+							$('#info').fadeIn(300);
+							$('#info div div').attr("class", "alert alert-success");
+							$('#info div div').empty().append(				
+									"<strong>Uploaded new Image</strong> Well done!");
+							 });
+					}
+		    })
 
-				
-			    $('#u_file').fileupload({url: '/PictureCommunity/REST/newpicture', formData: function(form) {
-					return [{ name: 'title', value: $("#u_title")},{ name: 'description', value: $("#u_description")}, { name: 'public', value: true }]; 
-				}});
-			}
-			
-			$(function () {
-				$('#u_file').fileupload({url: '/PictureCommunity/REST/newpicture', formData: function(form) {
-					return [{ name: 'title', value: $("#u_title")},{ name: 'description', value: $("#u_description")}, { name: 'public', value: true }]; 
-				}});
-			});*/
-			
-			$(function () {
-			    $('#fileupload').fileupload({url: '/PictureCommunity/REST/newpicture', formData: function(form) {
-					return [{ name: 'description', value: 'Ein perfektes Bild eines Meisters'}, { name: 'public', value: true }]; 
-				}});
-			});
 			
 			</script>
 	

@@ -9,27 +9,12 @@ $.ajaxSetup({
 					"<strong>No Authentication.</strong> "
 					+"Please  <a href=\"#login\" class=\"alert-link\">sign in</a>. "
 					+"Not a member yet? <a href=\"#register\" class=\"alert-link\">Register Now!</a>");
-			
-		},
-		201: function(){
-			
-			$('#info').fadeIn(300);
-			$('#info div div').attr("class", "alert alert-success");
-			$('#info div div').empty().append(				
-					"<strong>Created new User</strong> and logged in.");
 		},
 		403: function(){
 			
 		},
 		404: function(){
 			alert("Username is already registered\nChoose another.");
-		},
-		409: function(){
-			$('#info').fadeIn(300);
-			$('#info div div').attr("class", "alert alert-danger");
-			$('#info div div').empty().append(				
-					"<strong>Username already taken.</strong> "
-					+"Please choose another.");
 		}
 	}
 });
@@ -86,9 +71,23 @@ function logout() {
 function register(name, password, mail) {
 	var senddata={ username : name, password : password, mailaddress: mail };
 	$.post('/PictureCommunity/REST/register', senddata, function(data) {})
+		.fail(function(jqxhr, textStatus, error) {
+			$('#info').fadeIn(300);
+			$('#info div div').attr("class", "alert alert-danger");
+			$('#info div div').empty().append(				
+					"<strong>Username already taken.</strong> "
+					+"Please choose another.");
+		})
 		.done(function(data){
-				login(name, password);
-			});
+			$('#info').fadeIn(300);
+			$('#info div div').attr("class", "alert alert-success");
+			$('#info div div').empty().append(				
+					"<strong>Created new User</strong> and logged in.");
+			
+			login(name, password);
+			window.location.hash = "home";
+			locationHashChanged();
+		});
 }
 
 /* Sucht den Anwender, dessen Anmeldenamen die Zeichenkette name enthaelt. */
