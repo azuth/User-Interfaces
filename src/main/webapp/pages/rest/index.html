@@ -326,7 +326,9 @@
 					},
 					done: function (e, data) {
 						 locationHashChanged(function(){
-						 
+							 $('#u_title').val("");
+							 $('#u_description').val("");
+							 $('#u_visibility').prop('selectedIndex', 0);
 							$('#info').fadeIn(300);
 							$('#info div div').attr("class", "alert alert-success");
 							$('#info div div').empty().append(				
