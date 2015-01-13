@@ -326,7 +326,7 @@ public class RESTController {
 	 * @return ID des Bildes.
 	 */
 	@RequestMapping(value="/newpicture", method=RequestMethod.POST)
-	public ResponseEntity<Integer> upload(Principal principal, @RequestParam String description,  @RequestParam("public") boolean publicVisible,
+	public ResponseEntity<Integer> upload(Principal principal, @RequestParam(required = false) String title, @RequestParam String description,  @RequestParam("public") boolean publicVisible,
 									@RequestParam MultipartFile file) {
 
 		StringBuilder logMessage = new StringBuilder();
@@ -339,7 +339,15 @@ public class RESTController {
 				de.hska.iwii.picturecommunity.backend.entities.Picture pic = new de.hska.iwii.picturecommunity.backend.entities.Picture();
 				pic.setData(file.getBytes());
 				pic.setMimeType(file.getContentType());
-				pic.setName(file.getOriginalFilename());
+				if(title != null){
+					if(title != ""){
+						pic.setName(title);
+					}else{
+						pic.setName(file.getOriginalFilename());
+					}
+				}else{
+					pic.setName(file.getOriginalFilename());
+				}
 				pic.setDescription(description);
 				pic.setPublicVisible(publicVisible);
 				pictureDAO.createPicture(caller, pic);
