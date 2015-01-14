@@ -2,8 +2,9 @@ package de.hska.iwii.picturecommunity.backend.listener;
 
 import de.hska.iwii.picturecommunity.backend.entities.User;
 import de.hska.iwii.picturecommunity.controller.LoginController;
-import org.primefaces.push.PushContext;
-import org.primefaces.push.PushContextFactory;
+
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,8 +35,11 @@ public class LogoutHandler extends SimpleUrlLogoutSuccessHandler {
 
         this.setDefaultTargetUrl("/faces/pages/public/login.xhtml");
 		this.setTargetUrlParameter("/faces/pages/public/login.xhtml");
-
+		
 		LoginController.loggedOut(user);
+		
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish("/logout", user.getName());
 
         super.onLogoutSuccess(request, response, authentication);
     }

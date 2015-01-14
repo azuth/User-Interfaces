@@ -3,8 +3,8 @@ package de.hska.iwii.picturecommunity.backend.listener;
 import de.hska.iwii.picturecommunity.backend.entities.User;
 import de.hska.iwii.picturecommunity.controller.LoginController;
 
-import org.primefaces.push.PushContext;
-import org.primefaces.push.PushContextFactory;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -39,7 +39,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         Logger log = Logger.getLogger(this.getClass().getName());
         User user = (User)authentication.getPrincipal();
         log.log(Level.INFO, "Login event catched: " + user.getName());
-		
+        
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish("/login", user.getName());
+        
         LoginController.loggedIn(user);
     }
 }

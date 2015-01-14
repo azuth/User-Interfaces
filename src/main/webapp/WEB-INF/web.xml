@@ -14,6 +14,15 @@
 		<url-pattern>/faces/*</url-pattern>
 	</servlet-mapping>
 	<servlet>
+		<servlet-name>Push Servlet</servlet-name>
+		<servlet-class>org.primefaces.push.PushServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+    <servlet-mapping>
+		<servlet-name>Push Servlet</servlet-name>
+		<url-pattern>/primepush/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>RESTServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>

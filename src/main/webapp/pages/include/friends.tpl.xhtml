@@ -14,18 +14,14 @@
                 paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink}"
                 styleClass="list-group">
         <f:facet name="header">Friends</f:facet>
-
+	
         <li class="list-group-item" style="height: 44px; vertical-align: middle">
-
-            <c:if test="#{friend.online}">
-                ONLINE!
-            </c:if>
-
-            <h:link outcome="/pages/public/profile.xhtml"  value="#{friend.user.name}"
-                    style='${friend.online ? "color: green;" : ""}'>
+        
+            <h:link outcome="/pages/public/profile.xhtml"  value="#{friend.user.name} #{friend.online ? '(online)' : '(offline)'}"
+                    style='${friend.online ? "color: green;" : "color: red;"}'>
                 <f:param name="user" value="#{friend.user.name}"/>
             </h:link>
-
+			
             <p:commandButton actionListener="#{userController.delFriend}" update=":friendsview" type="submit"
                              styleClass="pull-right" icon="ui-icon-minus" style="height: 26px;">
                 <f:param name="userId" value="#{friend.user.id}"/>
@@ -47,19 +43,15 @@
 
     <p:growl id="growl" showDetail="true" sticky="true" widgetVar="g"  />
 
-    <script type="text/javascript">
-        function handleLoginMessage(data) {
-            PrimeFaces.ab({source:'friendsview:j_idt65:j_idt66',update:'friendsview:j_idt65 friendsview'});
-            g.renderMessage({summary:'Login', detail: "User " + data + " logged on", severity: 'info'});
+	<p:socket onMessage="handleMessage" channel="/login" />
+	<p:socket onMessage="handleMessage" channel="/logout" />
+	
+	<script type="text/javascript">
+        function handleMessage(msg) {
+            facesmessage.severity = 'info';
+            alert('test');
+ 
+            PF('growl').show([msg]);
         }
-    </script>
-    <p:socket onMessage="handleLoginMessage" channel="/login_channel" />
-
-    <script type="text/javascript">
-        function handleLogoutMessage(data) {
-            PrimeFaces.ab({source:'friendsview:j_idt65:j_idt66',update:'friendsview:j_idt65 friendsview'});
-            g.renderMessage({summary:'Logout', detail: "User " + data + " logged off.", severity: 'info'});
-        }
-    </script>
-    <p:socket onMessage="handleLogoutMessage" channel="/logout_channel" />
+	</script>
 </div>
