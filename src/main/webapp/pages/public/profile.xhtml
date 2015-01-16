@@ -55,12 +55,12 @@
 			                </p:commandLink>
 			                
 			                <c:if test="#{loginController.instance == profileController.user}">
-			                  <p:commandLink update=":edit:content"
+			                  <!--<p:commandLink update=":edit:content"
 			                                 oncomplete="PF('editPictureDialog').show()">
 			                    <h:outputText value="Edit" />
 			
 			                    <f:setPropertyActionListener value="#{pic}" target="#{pictureController.selectedPicture}" />
-			                  </p:commandLink>
+			                  </p:commandLink>-->
 			                </c:if>
 			              </h:panelGrid>
 			            </p:panel>
@@ -93,9 +93,9 @@
 			      <p:dialog header="#{pictureController.selectedPicture.name}" widgetVar="fullPictureDialog" modal="true">
 			        <h:form id="fullview">
 			          <p:outputPanel id="content">
-			            <h:panelGrid style="text-align: center;">
+			            <h:panelGrid style="text-align: center; max-width:800px;">
 			              <p:graphicImage value="#{pictureController.picture}" title="#{pictureController.selectedPicture.name}"
-			                              alt="#{pictureController.selectedPicture.description}">
+			                              alt="#{pictureController.selectedPicture.description}" style="max-width:800px;">
 			                <f:param name="id" value="#{pictureController.selectedPicture.id}" />
 			              </p:graphicImage>
 			
